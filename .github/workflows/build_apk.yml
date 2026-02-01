@@ -10,12 +10,18 @@ jobs:
         with:
           channel: 'stable'
           flutter-version: '3.24.0'
-      - run: flutter pub get
-      - name: Repair Android Files
-        run: flutter create . --platforms android
-      - run: flutter build apk --release --no-tree-shake-icons
+
+      - name: Clean and Get Dependencies
+        run: |
+          flutter clean
+          flutter pub get
+
+      - name: Build APK (Auto-Fix)
+        run: flutter build apk --release --no-tree-shake-icons
+        
       - name: Upload APK
+        if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: StarChat-Final-APK
+          name: StarChat-Love-APK
           path: build/app/outputs/flutter-apk/app-release.apk
