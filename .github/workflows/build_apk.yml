@@ -10,12 +10,14 @@ jobs:
         with:
           channel: 'stable'
           flutter-version: '3.24.0'
-
-      - name: Recreate and Fix Android
+      - name: Fix and Build
         run: |
           flutter pub get
           flutter create . --platforms android
-          # تحديث إصدار Kotlin ليتوافق مع متطلبات السيرفر
           sed -i 's/ext.kotlin_version = .*/ext.kotlin_version = "1.9.10"/' android/build.gradle
-
-      - name: Build APK
+          flutter build apk --release --no-tree-shake-icons
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: StarChat-Beast-Final
+          path: build/app/outputs/flutter-apk/app-release.apk
