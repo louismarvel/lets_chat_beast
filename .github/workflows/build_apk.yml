@@ -10,18 +10,19 @@ jobs:
         with:
           channel: 'stable'
           flutter-version: '3.24.0'
-      - name: Master Identity & Firebase Sync
+      - name: Ultimate Firebase Fix
         run: |
-          # 1. إنشاء المشروع بالهوية الصحيحة المطابقة لـ Firebase
+          # 1. توحيد الهوية مع Firebase
           flutter create . --platforms android --org com.starchat --project-name starchat_love
           
-          # 2. إضافة محرك خدمات جوجل لملف الإعدادات الرئيسي
+          # 2. إضافة الـ Classpath في الملف الرئيسي (المحرك الذي كان مفقوداً)
+          sed -i "s/repository {/repository {\n        google()/" android/build.gradle
           sed -i "s/dependencies {/dependencies {\n        classpath 'com.google.gms:google-services:4.3.15'/" android/build.gradle
           
-          # 3. تفعيل إضافة جوجل داخل ملف التطبيق
+          # 3. تفعيل الـ Plugin في ملف التطبيق
           echo "apply plugin: 'com.google.gms.google-services'" >> android/app/build.gradle
           
-          # 4. تحديث نسخة Kotlin لضمان التوافق
+          # 4. إصلاح نسخ Kotlin لضمان التوافق
           sed -i "s/ext.kotlin_version = .*/ext.kotlin_version = '1.9.10'/" android/build.gradle
           
           flutter pub get
@@ -30,5 +31,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Starchat-Love-Final-Fixed
+          name: Starchat-Love-38-Fixed
           path: build/app/outputs/flutter-apk/app-release.apk
