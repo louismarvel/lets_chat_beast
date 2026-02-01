@@ -1,14 +1,3 @@
-
-class ChatPage extends StatelessWidget {
-  const ChatPage({super.key});
-  void _contactSupport() async {
-    final Uri emailLaunchUri = Uri(
-      scheme: 'mailto',
-      path: 'fouadstar24@gmail.com',
-      queryParameters: {'subject': 'Support Request - ID: STAR_88'},
-    );
-    launchUrl(emailLaunchUri);
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -1006,3 +995,10 @@ rm -rf .git
 git init
 git remote add origin https://louismarvel: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@github.com/louismarvel/lets_chat_beast.git
 # 3. الرفع النهائي
+git add .
+git commit -m "🚀 Clean Deployment without warnings"
+git push -u origin master --force
+# 1. الدخول لمجلد مشروعك (الوحش)
+cd ~/lets_chat_beast
+# 2. تهيئة المشروع وإضافة كل الملفات (وليس فقط README)
+git init
