@@ -10,12 +10,12 @@ jobs:
         with:
           channel: 'stable'
           flutter-version: '3.24.0'
-      - name: Force Sync with Starchat-Love
+      - name: Final Beast Sync
         run: |
           flutter pub get
-          # إنشاء الهوية الرقمية لتطابق Firebase تماماً
-          flutter create . --platforms android --org com.fouad --project-name starchat_love
-          # إصلاح أخطاء Kotlin التي ظهرت في صورك السابقة
+          # توحيد اسم الحزمة مع ملف Firebase الرسمي الخاص بك
+          flutter create . --platforms android --org com.starchat --project-name starchat_love
+          # إصلاح نسخ Kotlin والاعتمادات
           sed -i "s/ext.kotlin_version = .*/ext.kotlin_version = '1.9.10'/" android/build.gradle
           sed -i 's/id "org.jetbrains.kotlin.android" version .*/id "org.jetbrains.kotlin.android" version "1.9.10" apply false/' android/settings.gradle || true
       - name: Build Official APK
