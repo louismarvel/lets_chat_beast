@@ -11,21 +11,11 @@ jobs:
           channel: 'stable'
           flutter-version: '3.24.0'
 
-      - name: Force Recreate and Patch Android
+      - name: Recreate and Fix Android
         run: |
           flutter pub get
           flutter create . --platforms android
-          # تحديث إصدار Kotlin في ملف build.gradle
+          # تحديث إصدار Kotlin ليتوافق مع متطلبات السيرفر
           sed -i 's/ext.kotlin_version = .*/ext.kotlin_version = "1.9.10"/' android/build.gradle
-          # تحديث إصدار الـ Gradle plugin ليتوافق مع Kotlin الجديد
-          sed -i 's/com.android.tools.build:gradle:.*/com.android.tools.build:gradle:8.1.0"/' android/build.gradle || true
 
-      - name: Build Final APK
-        run: flutter build apk --release --no-tree-shake-icons
-        
-      - name: Upload APK
-        if: success()
-        uses: actions/upload-artifact@v4
-        with:
-          name: StarChat-Beast-Official
-          path: build/app/outputs/flutter-apk/app-release.apk
+      - name: Build APK
