@@ -1,66 +1,124 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void main() => runApp(const ChatStarApp());
+void main() => runApp(const StarChatFinal());
 
-class ChatStarApp extends StatelessWidget {
-  const ChatStarApp({super.key});
+class StarChatFinal extends StatelessWidget {
+  const StarChatFinal({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF0D0D0D),
-        primaryColor: const Color(0xFFFF1493),
-        textTheme: GoogleFonts.orbitronTextTheme(ThemeData.dark().textTheme),
+        scaffoldBackgroundColor: const Color(0xFF0A0A0A),
+        primaryColor: const Color(0xFFFF007F),
       ),
-      initialRoute: '/',
-      routes: {
-        '/': (context) => const WelcomeScreen(),
-        '/login': (context) => const LoginScreen(),
-        '/chat': (context) => const ChatRoomsScreen(),
-      },
+      home: const MainNexusScreen(),
     );
   }
 }
 
-// --- واجهة الترحيب الجذابة ---
-class WelcomeScreen extends StatelessWidget {
-  const WelcomeScreen({super.key});
+class MainNexusScreen extends StatefulWidget {
+  const MainNexusScreen({super.key});
+
+  @override
+  State<MainNexusScreen> createState() => _MainNexusScreenState();
+}
+
+class _MainNexusScreenState extends State<MainNexusScreen> {
+  int _currentIndex = 0;
+
+  final List<Widget> _screens = [
+    const RoomsScreen(), // ميزة غرف الدردشة
+    const ChatBeastScreen(), // ميزة الدردشة الخاصة
+    const ProfileNeonScreen(), // ميزة الملف الشخصي
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(Icons.favorite, size: 100, color: Color(0xFFFF1493)),
-            const SizedBox(height: 20),
-            Text('CHATSTAR PRO', style: GoogleFonts.orbitron(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.white)),
-            const SizedBox(height: 50),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFFFF1493), padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15)),
-              onPressed: () => Navigator.pushNamed(context, '/login'),
-              child: const Text('ENTER NEON WORLD'),
-            ),
-          ],
+      body: _screens[_currentIndex],
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _currentIndex,
+        selectedItemColor: const Color(0xFFFF007F),
+        onTap: (index) => setState(() => _currentIndex = index),
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.forum), label: 'الغرف'),
+          BottomNavigationBarItem(icon: Icon(Icons.bolt), label: 'الوحش'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'أنا'),
+        ],
+      ),
+    );
+  }
+}
+
+// --- ميزة غرف الدردشة الاحترافية ---
+class RoomsScreen extends StatelessWidget {
+  const RoomsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          expandedHeight: 150,
+          flexibleSpace: FlexibleSpaceBar(
+            title: Text('STAR CHAT ROOMS', style: GoogleFonts.orbitron(letterSpacing: 2)),
+            background: Container(color: Colors.black),
+          ),
         ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) => Container(
+              margin: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(15),
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xFFFF007F).withOpacity(0.5)),
+                borderRadius: BorderRadius.circular(15),
+                gradient: LinearGradient(colors: [Colors.black, Colors.grey[900]!]),
+              ),
+              child: ListTile(
+                leading: const CircleAvatar(backgroundColor: Color(0xFFFF007F), child: Icon(Icons.group)),
+                title: Text('غرفة الوحوش رقم ${index + 1}', style: const TextStyle(color: Colors.white)),
+                subtitle: const Text('متواجد الآن: 45 عضو', style: TextStyle(color: Colors.grey)),
+                trailing: const Icon(Icons.arrow_forward_ios, color: Color(0xFFFF007F)),
+              ),
+            ),
+            childCount: 10,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+// --- ميزة الدردشة الذكية ---
+class ChatBeastScreen extends StatelessWidget {
+  const ChatBeastScreen({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.security, size: 80, color: Colors.cyanAccent),
+          const SizedBox(height: 20),
+          Text('نظام تشفير الوحش نشط', style: GoogleFonts.orbitron(color: Colors.cyanAccent)),
+        ],
       ),
     );
   }
 }
 
-// --- واجهة تسجيل StarChat ---
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+// --- ميزة الملف الشخصي النيوني ---
+class ProfileNeonScreen extends StatelessWidget {
+  const ProfileNeonScreen({super.key});
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('SIGN IN'), backgroundColor: Colors.transparent),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
+    return const Center(child: Text('بروفايل النيون جاهز'));
+  }
+}
             TextField(decoration: InputDecoration(labelText: 'Username', enabledBorder: UnderlineInputBorder(borderSide: BorderSide(color: Color(0xFFFF1493))))),
             const SizedBox(height: 20),
             ElevatedButton(onPressed: () => Navigator.pushNamed(context, '/chat'), child: const Text('JOIN CHAT')),
