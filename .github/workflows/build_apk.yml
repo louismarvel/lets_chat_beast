@@ -10,14 +10,19 @@ jobs:
         with:
           channel: 'stable'
           flutter-version: '3.24.0'
-      - name: Inject Google Services Configuration
+      - name: Master Identity & Firebase Sync
         run: |
-          # تأكيد اسم الحزمة ليتطابق مع ملف الـ JSON
+          # 1. إنشاء المشروع بالهوية الصحيحة المطابقة لـ Firebase
           flutter create . --platforms android --org com.starchat --project-name starchat_love
           
-          # ربط ملف google-services.json بملفات الأندرويد برمجياً
-          sed -i '/dependencies {/a \        classpath "com.google.gms:google-services:4.3.15"' android/build.gradle
+          # 2. إضافة محرك خدمات جوجل لملف الإعدادات الرئيسي
+          sed -i "s/dependencies {/dependencies {\n        classpath 'com.google.gms:google-services:4.3.15'/" android/build.gradle
+          
+          # 3. تفعيل إضافة جوجل داخل ملف التطبيق
           echo "apply plugin: 'com.google.gms.google-services'" >> android/app/build.gradle
+          
+          # 4. تحديث نسخة Kotlin لضمان التوافق
+          sed -i "s/ext.kotlin_version = .*/ext.kotlin_version = '1.9.10'/" android/build.gradle
           
           flutter pub get
       - name: Build Official APK
@@ -25,5 +30,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Starchat-Love-Ready
+          name: Starchat-Love-Final-Fixed
           path: build/app/outputs/flutter-apk/app-release.apk
