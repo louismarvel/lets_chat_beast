@@ -10,14 +10,18 @@ jobs:
         with:
           channel: 'stable'
           flutter-version: '3.24.0'
-      - name: Fix Android and Build
+      - name: Final Android Fix
         run: |
           flutter pub get
           flutter create . --platforms android
-          sed -i 's/ext.kotlin_version = .*/ext.kotlin_version = "1.9.10"/' android/build.gradle
-          flutter build apk --release --no-tree-shake-icons
+          # تحديث Kotlin في ملف build.gradle
+          sed -i "s/ext.kotlin_version = .*/ext.kotlin_version = '1.9.10'/" android/build.gradle
+          # تحديث Kotlin في ملف settings.gradle
+          sed -i 's/id "org.jetbrains.kotlin.android" version .*/id "org.jetbrains.kotlin.android" version "1.9.10" apply false/' android/settings.gradle || true
+      - name: Build APK
+        run: flutter build apk --release --no-tree-shake-icons
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: StarChat-Beast-Official
+          name: StarChat-Beast-Ready
           path: build/app/outputs/flutter-apk/app-release.apk
