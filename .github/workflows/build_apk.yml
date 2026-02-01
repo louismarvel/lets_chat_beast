@@ -10,9 +10,11 @@ jobs:
         with:
           channel: 'stable'
           flutter-version: '3.24.0'
-      - name: Force Fix Android Config
+      - name: Fix Android and Build
         run: |
           flutter pub get
           flutter create . --platforms android
-          # تعديل إصدار Kotlin في الملف الرئيسي
-          sed -i 's/ext.kotlin_version = .*/ext.kotlin_version = "1.
+          sed -i 's/ext.kotlin_version = .*/ext.kotlin_version = "1.9.10"/' android/build.gradle
+          flutter build apk --release --no-tree-shake-icons
+      - name: Upload APK
+        uses: actions/upload-artifact
