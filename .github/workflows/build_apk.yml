@@ -11,17 +11,17 @@ jobs:
           channel: 'stable'
           flutter-version: '3.24.0'
 
-      - name: Clean and Get Dependencies
+      - name: Recreate Android Project
         run: |
-          flutter clean
           flutter pub get
+          flutter create . --platforms android
 
-      - name: Build APK (Auto-Fix)
+      - name: Build APK
         run: flutter build apk --release --no-tree-shake-icons
         
       - name: Upload APK
         if: success()
         uses: actions/upload-artifact@v4
         with:
-          name: StarChat-Love-APK
+          name: StarChat-Love-Final
           path: build/app/outputs/flutter-apk/app-release.apk
