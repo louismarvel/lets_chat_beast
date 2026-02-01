@@ -12,18 +12,12 @@ jobs:
           channel: 'stable'
           flutter-version: '3.24.0'
 
-      - name: Reconstruct Android Structure
+      - name: Force Reconstruction & Clean Build
         run: |
-          # 1. إجبار فلاتر على إنشاء ملفات الأندرويد المفقودة (الهيكل)
+          # 1. إعادة بناء الهيكل وتجاوز أي تعارض
           flutter create . --platforms android --org com.starchat --project-name starchat_love
           
-          # 2. التأكد من وجود مجلد app قبل نقل الملف
-          mkdir -p android/app
-          
-          # 3. محاولة العثور على ملف الـ JSON الذي رفعته ونقله لمكانه الصحيح في الهيكل الجديد
-          cp google-services.json android/app/ || echo "الملف موجود بالفعل أو في مكان آخر"
-
-          # 4. بناء ملف build.gradle الرئيسي يدوياً
+          # 2. حقن الإعدادات اللازمة لـ Firebase يدوياً
           cat <<EOF > android/build.gradle
           buildscript {
               ext.kotlin_version = '1.9.10'
@@ -37,16 +31,21 @@ jobs:
           allprojects { repositories { google(); mavenCentral() } }
           EOF
 
-          # 5. تفعيل الإضافة في ملف التطبيق الجديد
+          # 3. التأكد من مكان ملف الـ JSON
+          mkdir -p android/app
+          cp google-services.json android/app/ || true
           echo "apply plugin: 'com.google.gms.google-services'" >> android/app/build.gradle
           
+          # 4. تنظيف شامل قبل البناء (لحل مشكلة الـ Kernel Snapshot)
+          flutter pub get
+          flutter clean
           flutter pub get
 
-      - name: Build Official APK
-        run: flutter build apk --release --no-tree-shake-icons
+      - name: Build Official APK (Safe Mode)
+        run: flutter build apk --release --no-tree-shake-icons --no-pub
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Starchat-Love-Reconstructed
+          name: Starchat-Love-Success
           path: build/app/outputs/flutter-apk/app-release.apk
