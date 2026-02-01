@@ -1,25 +1,27 @@
-name: starchat_beast
-description: The Global Monster Chat App
-version: 1.0.0+1
-
-environment:
-  sdk: '>=3.0.0 <4.0.0'
-
-dependencies:
-  flutter:
-    sdk: flutter
-  cupertino_icons: ^1.0.6
-  google_fonts: ^6.1.0
-  firebase_core: ^2.24.2
-  firebase_auth: ^4.15.3
-  cloud_firestore: ^4.13.6
-  google_mobile_ads: ^3.0.0
-  http: ^1.1.0
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
-  flutter_lints: ^3.0.0
-
-flutter:
-  uses-material-design: true
+name: Build APK
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          flutter-version: '3.24.0'
+      - name: Final Fix for Starchat Beast
+        run: |
+          flutter pub get
+          # إصلاح ملفات الأندرويد لتناسب المكتبات العالمية
+          flutter create . --platforms android
+          # تحديث نسخة Kotlin المطلوبة في صورك الأخيرة
+          sed -i "s/ext.kotlin_version = .*/ext.kotlin_version = '1.9.10'/" android/build.gradle
+          sed -i 's/id "org.jetbrains.kotlin.android" version .*/id "org.jetbrains.kotlin.android" version "1.9.10" apply false/' android/settings.gradle || true
+      - name: Build Global APK
+        run: flutter build apk --release --no-tree-shake-icons
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Starchat-Beast-Global
+          path: build/app/outputs/flutter-apk/app-release.apk
