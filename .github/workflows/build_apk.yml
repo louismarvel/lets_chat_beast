@@ -10,14 +10,9 @@ jobs:
         with:
           channel: 'stable'
           flutter-version: '3.24.0'
-      - name: Fix and Build
+      - name: Force Fix Android Config
         run: |
           flutter pub get
           flutter create . --platforms android
-          sed -i 's/ext.kotlin_version = .*/ext.kotlin_version = "1.9.10"/' android/build.gradle
-          flutter build apk --release --no-tree-shake-icons
-      - name: Upload APK
-        uses: actions/upload-artifact@v4
-        with:
-          name: StarChat-Beast-Final
-          path: build/app/outputs/flutter-apk/app-release.apk
+          # تعديل إصدار Kotlin في الملف الرئيسي
+          sed -i 's/ext.kotlin_version = .*/ext.kotlin_version = "1.
