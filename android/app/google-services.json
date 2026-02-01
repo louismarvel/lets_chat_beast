@@ -1,0 +1,47 @@
+{
+  "معلومات_المشروع": {
+    "رقم_المشروع": "577889780126"،
+    "project_id": "starchat-love",
+    "storage_bucket": "starchat-love.firebasestorage.app"
+  },
+  "عميل": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:577889780126:android:5a57383becc3fa956e568f",
+        "android_client_info": {
+          "package_name": "com.starchat.love"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "577889780126-dlbgeuo33uhqb5vmj5saq69m83un6psq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "اسم_الحزمة": "com.starchat.love",
+            "certificate_hash": "fd55f4c5af5b953cc57a2be44cb082c8f6635e8e"
+          }
+        },
+        {
+          "client_id": "577889780126-48ak1j7ci255g9qpml944ht4hllol1fk.apps.googleusercontent.com",
+          "نوع_العميل": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcwTBI6c8BWolvNwsbLzCEBjv92HAbP9A"
+        }
+      ],
+      "خدمات": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "577889780126-48ak1j7ci255g9qpml944ht4hllol1fk.apps.googleusercontent.com",
+              "نوع_العميل": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
