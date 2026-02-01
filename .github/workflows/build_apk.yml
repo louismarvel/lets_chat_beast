@@ -10,20 +10,35 @@ jobs:
         with:
           channel: 'stable'
           flutter-version: '3.24.0'
-      - name: Ultimate Firebase Fix
+      - name: Ultimate Force Sync
         run: |
-          # 1. توحيد الهوية مع Firebase
+          # 1. تهيئة المشروع بالهوية المطابقة تماماً لملف الـ JSON
           flutter create . --platforms android --org com.starchat --project-name starchat_love
           
-          # 2. إضافة الـ Classpath في الملف الرئيسي (المحرك الذي كان مفقوداً)
-          sed -i "s/repository {/repository {\n        google()/" android/build.gradle
-          sed -i "s/dependencies {/dependencies {\n        classpath 'com.google.gms:google-services:4.3.15'/" android/build.gradle
-          
-          # 3. تفعيل الـ Plugin في ملف التطبيق
+          # 2. حقن المحرك الرئيسي في ملف build.gradle (المستوى الأعلى)
+          cat <<EOF > android/build.gradle
+          buildscript {
+              ext.kotlin_version = '1.9.10'
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+              dependencies {
+                  classpath 'com.android.tools.build:gradle:8.1.0'
+                  classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:\$kotlin_version"
+                  classpath 'com.google.gms:google-services:4.3.15'
+              }
+          }
+          allprojects {
+              repositories {
+                  google()
+                  mavenCentral()
+              }
+          }
+          EOF
+
+          # 3. تفعيل الإضافة في ملف build.gradle (مستوى التطبيق)
           echo "apply plugin: 'com.google.gms.google-services'" >> android/app/build.gradle
-          
-          # 4. إصلاح نسخ Kotlin لضمان التوافق
-          sed -i "s/ext.kotlin_version = .*/ext.kotlin_version = '1.9.10'/" android/build.gradle
           
           flutter pub get
       - name: Build Official APK
@@ -31,5 +46,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Starchat-Love-38-Fixed
+          name: Starchat-Love-38-Final
           path: build/app/outputs/flutter-apk/app-release.apk
