@@ -1,17 +1,19 @@
-name: STARCHAT-CLEAN-BASE-2026
+name: Build APK
 on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0'
+          channel: 'stable'
+          flutter-version: '3.27.0' # هذا الإصدار سيحل مشكلة google_fonts
       - run: flutter pub get
       - run: flutter build apk --release --no-tree-shake-icons
-      - name: Upload
+      - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: StarChat-Clean-APK
+          name: LetsChatBeast-APK
           path: build/app/outputs/flutter-apk/app-release.apk
