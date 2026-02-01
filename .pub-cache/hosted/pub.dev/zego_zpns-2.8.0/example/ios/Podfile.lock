@@ -1,0 +1,39 @@
+PODS:
+  - Flutter (1.0.0)
+  - zego_zim (2.17.1):
+    - Flutter
+    - ZIM (= 2.17.1)
+  - zego_zpns (2.6.0):
+    - Flutter
+    - ZPNs (= 2.6.0)
+  - ZIM (2.17.1)
+  - ZPNs (2.6.0)
+
+DEPENDENCIES:
+  - Flutter (from `Flutter`)
+  - zego_zim (from `.symlinks/plugins/zego_zim/ios`)
+  - zego_zpns (from `.symlinks/plugins/zego_zpns/ios`)
+
+SPEC REPOS:
+  trunk:
+    - ZIM
+    - ZPNs
+
+EXTERNAL SOURCES:
+  Flutter:
+    :path: Flutter
+  zego_zim:
+    :path: ".symlinks/plugins/zego_zim/ios"
+  zego_zpns:
+    :path: ".symlinks/plugins/zego_zpns/ios"
+
+SPEC CHECKSUMS:
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  zego_zim: 52cc084a83dc165903f1f7f90977825926d12bd2
+  zego_zpns: e2ef9b972e9b6be00b78b32b71c550c426584752
+  ZIM: f3ac70a6ddf0e2b70f2a2de29048ab67ce2875f6
+  ZPNs: 73bad0046a74e37315201053f9a0e7ac625d9436
+
+PODFILE CHECKSUM: fb408a289158b00660fcdf4ee69e15b9fae7e08f
+
+COCOAPODS: 1.16.2

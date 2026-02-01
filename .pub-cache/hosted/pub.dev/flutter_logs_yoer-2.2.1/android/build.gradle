@@ -1,0 +1,62 @@
+group 'com.flutter.logs.plogs.flutter_logs_yoer'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    ext.kotlin_version = '1.8.10'
+    repositories {
+        mavenCentral()
+        google()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.0.2'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+rootProject.allprojects {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+
+android {
+    namespace 'com.flutter.logs.plogs.flutter_logs_yoer'
+    compileSdkVersion 34
+    defaultConfig {
+        minSdkVersion 16
+    }
+    sourceSets {
+        main.java.srcDirs += 'src/main/kotlin'
+    }
+    lintOptions {
+        disable 'InvalidPackage'
+    }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    //RxJav2
+    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
+    implementation  'io.reactivex.rxjava2:rxkotlin:2.2.0'
+
+    //RxLogs
+    implementation "com.github.umair13adil:RxLogs:v1.0.23"
+
+    implementation "androidx.core:core-ktx:1.9.0"
+    // Kotlin + coroutines
+    implementation "androidx.work:work-runtime-ktx:2.8.1"
+}

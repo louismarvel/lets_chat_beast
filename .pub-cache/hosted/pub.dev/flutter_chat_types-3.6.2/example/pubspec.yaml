@@ -1,0 +1,9 @@
+name: example
+environment:
+  sdk: '>=2.19.0 <4.0.0'
+dependencies:
+  flutter_chat_types:
+    path: ..
+dev_dependencies:
+  dart_code_metrics: ^5.7.4
+  flutter_lints: ^2.0.2

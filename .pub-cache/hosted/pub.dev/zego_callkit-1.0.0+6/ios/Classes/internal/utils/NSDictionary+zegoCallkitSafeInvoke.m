@@ -1,0 +1,36 @@
+
+//
+//  NSDictionary+safeInvoke.m
+//
+//  Created by 武耀琳 on 2022/5/11.
+//
+
+#import "NSDictionary+zegoCallkitSafeInvoke.h"
+
+@implementation NSDictionary (callkitSafeInvoke)
+
+-(nullable id)safeObjectForKey:(nonnull NSString *)key{
+    id object = [self objectForKey:key];
+    if(object == nil || object == NULL || [object isEqual:[NSNull null]]){
+        return nil;
+    }
+    return object;
+}
+
+- (NSString *)descriptionWithLocale:(id)locale {
+    NSArray *allKeys = [self allKeys];
+    NSMutableString *str = [[NSMutableString alloc] initWithFormat:@"{\t\n "];
+    for (NSString *key in allKeys) {
+        id value = self[key];
+        [str appendFormat:@"\t \"%@\" = %@,\n", key, value];
+    }
+    [str appendString:@"}"];
+    NSString *tmpStr1 = [str stringByReplacingOccurrencesOfString:@" " withString:@""];
+    NSString *tmpStr2 = [tmpStr1  stringByReplacingOccurrencesOfString:@"\n"
+                                                            withString:@""];
+    NSString *tmpStr3 = [tmpStr2 stringByReplacingOccurrencesOfString:@"\t"
+                                                           withString:@""];
+    return tmpStr3;
+}
+
+@end

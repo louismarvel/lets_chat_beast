@@ -1,0 +1,12 @@
+name: starchat_love
+description: StarChat Pro Max Edition.
+version: 1.0.0+1
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.6
+  google_fonts: ^8.0.0
+flutter:
+  uses-material-design: true

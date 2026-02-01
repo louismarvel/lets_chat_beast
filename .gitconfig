@@ -1,0 +1,17 @@
+[user]
+	email = louismarvel@example.com
+	name = louismarvel
+[safe]
+	directory = *
+	directory = *
+	directory = *
+	directory = *
+	directory = *
+	directory = *
+	directory = *
+	directory = *
+	directory = *
+	directory = *
+	directory = *
+[credential]
+	helper = store --file ~/.git-credentials

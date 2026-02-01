@@ -1,0 +1,29 @@
+name: zego_plugin_adapter
+description: ZegoCloud's plugin adapter, which a wraper for `zego_uikit` to use plugins, such as `zego_uikit_beauty_plugin` and `zego_uikit_signaling_plugin`
+version: 2.14.2
+homepage: https://www.zegocloud.com/
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_logs_yoer: ^2.2.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+  import_sorter: any
+  lints: ^6.0.0
+
+import_sorter:
+  comments: false
+
+linter:
+  rules:
+    public_member_api_docs: true
