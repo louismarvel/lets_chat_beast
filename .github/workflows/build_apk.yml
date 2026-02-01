@@ -5,25 +5,48 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           flutter-version: '3.24.0'
-      - name: Final Identity Injection
+
+      - name: Reconstruct Android Structure
         run: |
-          # إنشاء الهوية الرقمية لتطابق ملف الـ JSON
+          # 1. إجبار فلاتر على إنشاء ملفات الأندرويد المفقودة (الهيكل)
           flutter create . --platforms android --org com.starchat --project-name starchat_love
           
-          # حقن المحرك المفقود (Plugin Classpath)
-          sed -i "s/dependencies {/dependencies {\n        classpath 'com.google.gms:google-services:4.3.15'/" android/build.gradle
+          # 2. التأكد من وجود مجلد app قبل نقل الملف
+          mkdir -p android/app
+          
+          # 3. محاولة العثور على ملف الـ JSON الذي رفعته ونقله لمكانه الصحيح في الهيكل الجديد
+          cp google-services.json android/app/ || echo "الملف موجود بالفعل أو في مكان آخر"
+
+          # 4. بناء ملف build.gradle الرئيسي يدوياً
+          cat <<EOF > android/build.gradle
+          buildscript {
+              ext.kotlin_version = '1.9.10'
+              repositories { google(); mavenCentral() }
+              dependencies {
+                  classpath 'com.android.tools.build:gradle:8.1.0'
+                  classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:\$kotlin_version"
+                  classpath 'com.google.gms:google-services:4.3.15'
+              }
+          }
+          allprojects { repositories { google(); mavenCentral() } }
+          EOF
+
+          # 5. تفعيل الإضافة في ملف التطبيق الجديد
           echo "apply plugin: 'com.google.gms.google-services'" >> android/app/build.gradle
           
           flutter pub get
+
       - name: Build Official APK
         run: flutter build apk --release --no-tree-shake-icons
+
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Starchat-Love-38-Success
+          name: Starchat-Love-Reconstructed
           path: build/app/outputs/flutter-apk/app-release.apk
