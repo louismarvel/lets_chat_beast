@@ -11,9 +11,11 @@ jobs:
           channel: 'stable'
           flutter-version: '3.24.0'
       - run: flutter pub get
-      - run: flutter build apk --release --no-tree-shake-icons --split-debug-info=build/app/outputs/symbols
+      - name: Repair Android Files
+        run: flutter create . --platforms android
+      - run: flutter build apk --release --no-tree-shake-icons
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: LetsChatBeast-APK
+          name: StarChat-Final-APK
           path: build/app/outputs/flutter-apk/app-release.apk
