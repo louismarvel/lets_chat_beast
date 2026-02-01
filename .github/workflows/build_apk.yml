@@ -10,34 +10,13 @@ jobs:
         with:
           channel: 'stable'
           flutter-version: '3.24.0'
-      - name: Ultimate Force Sync
+      - name: Final Identity Injection
         run: |
-          # 1. تهيئة المشروع بالهوية المطابقة تماماً لملف الـ JSON
+          # إنشاء الهوية الرقمية لتطابق ملف الـ JSON
           flutter create . --platforms android --org com.starchat --project-name starchat_love
           
-          # 2. حقن المحرك الرئيسي في ملف build.gradle (المستوى الأعلى)
-          cat <<EOF > android/build.gradle
-          buildscript {
-              ext.kotlin_version = '1.9.10'
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-              dependencies {
-                  classpath 'com.android.tools.build:gradle:8.1.0'
-                  classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:\$kotlin_version"
-                  classpath 'com.google.gms:google-services:4.3.15'
-              }
-          }
-          allprojects {
-              repositories {
-                  google()
-                  mavenCentral()
-              }
-          }
-          EOF
-
-          # 3. تفعيل الإضافة في ملف build.gradle (مستوى التطبيق)
+          # حقن المحرك المفقود (Plugin Classpath)
+          sed -i "s/dependencies {/dependencies {\n        classpath 'com.google.gms:google-services:4.3.15'/" android/build.gradle
           echo "apply plugin: 'com.google.gms.google-services'" >> android/app/build.gradle
           
           flutter pub get
@@ -46,5 +25,5 @@ jobs:
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: Starchat-Love-38-Final
+          name: Starchat-Love-38-Success
           path: build/app/outputs/flutter-apk/app-release.apk
