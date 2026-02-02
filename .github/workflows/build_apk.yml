@@ -1,43 +1,68 @@
-name: Build APK
+name: Build StarChat Love
 on: [push]
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: 'stable'
           flutter-version: '3.24.0'
 
-      - name: Inject Pure Chatter Structure
+      - name: The Great Transformation (Chatter to StarChat)
         run: |
-          # 1. مسح أي مخلفات قديمة نهائياً
-          rm -rf android build .dart_tool
+          # 1. تنظيف شامل للبيئة
+          rm -rf *
           
-          # 2. إنشاء مشروع Chatter نظيف بنفس الهوية
+          # 2. سحب كود Chatter الأصلي
+          git clone https://github.com/ishandeveloper/Chatter-App.git .
+          
+          # 3. إعادة تسمية الحزمة والهوية لتطابق Firebase الخاص بك
           flutter create . --platforms android --org com.starchat --project-name starchat_love
           
-          # 3. حقن ملف Firebase في قلب المشروع الجديد
+          # 4. حقن ملف الـ JSON الذي وضعته أنت سابقاً (سنقوم بإنشائه برمجياً للتأكد)
           mkdir -p android/app
-          cp google-services.json android/app/ || echo "الملف غير موجود بالخارج"
+          cat <<EOF > android/app/google-services.json
+          {
+            "project_info": {
+              "project_number": "577889780126",
+              "project_id": "starchat-love",
+              "storage_bucket": "starchat-love.firebasestorage.app"
+            },
+            "client": [
+              {
+                "client_info": {
+                  "mobilesdk_app_id": "1:577889780126:android:5a57383becc3fa956e568f",
+                  "android_client_info": {
+                    "package_name": "com.starchat.love"
+                  }
+                },
+                "api_key": [
+                  { "current_key": "AIzaSyDcwTBI6c8BWolvNwsbLzCEBjv92HAbP9A" }
+                ],
+                "services": { "appinvite_service": { "other_platform_oauth_client": [] } }
+              }
+            ],
+            "configuration_version": "1"
+          }
+          EOF
 
-          # 4. إضافة المحرك (Classpath) لملف النظام
+          # 5. ربط المحركات (Gradle)
           sed -i "s/dependencies {/dependencies {\n        classpath 'com.google.gms:google-services:4.3.15'/" android/build.gradle
-          
-          # 5. تفعيل الإضافة داخل التطبيق
           echo "apply plugin: 'com.google.gms.google-services'" >> android/app/build.gradle
-          
-          # 6. جلب المكتبات وبناء الكود
+
+          # 6. تحديث المكتبات لتتوافق مع 2026
+          flutter pub upgrade --major-versions
           flutter pub get
-          
+
       - name: Build Official APK
         run: flutter build apk --release --no-tree-shake-icons
 
-      - name: Upload APK
+      - name: Upload Finished APK
         uses: actions/upload-artifact@v4
         with:
-          name: Chatter-Pure-Build
+          name: StarChat-Love-Final
           path: build/app/outputs/flutter-apk/app-release.apk
